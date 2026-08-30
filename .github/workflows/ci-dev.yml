@@ -1,0 +1,63 @@
+name: CI - Dev
+
+on:
+  push:
+    branches:
+      - dev
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+
+  test:
+    name: Check application
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Check Python syntax
+        run: |
+          python -m compileall app
+
+      - name: Check FastAPI application
+        env:
+          APP_NAME: "QR Code API"
+          APP_VERSION: "1.0.0"
+          DEBUG: "True"
+        run: |
+          python -c "from app.main import app; print('FastAPI application loaded successfully')"
+
+
+  create-pr:
+    name: Create Pull Request
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        
+      - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --base main \
+            --head dev \
+            --title "Merge dev into main" \
+            --body "CI passed successfully on dev."
