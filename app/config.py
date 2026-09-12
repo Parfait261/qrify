@@ -6,6 +6,11 @@ class Settings(BaseSettings):
     app_version: str
     debug: bool = False
 
+    smtp_host: str
+    smtp_port: int
+    smtp_username: str
+    smtp_password: str
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8"
