@@ -1,9 +1,8 @@
 from fastapi import APIRouter
 
-from app.schemas.qr_code import qr_code_request, qr_code_response
+from app.schemas.qr_code import qr_code_request, qr_code_response,qr_code_email_request
 from app.services.QRcodeService import QRcodeService
 from app.services.QRcodeGenerator import QRcodeGenerator
-from app.schemas.qr_code import qr_code_email_request
 from app.services.EmailSender import EmailSender
 from app.services.EmailService import EmailService
 
@@ -33,3 +32,4 @@ def send_qr_code_by_email(
     return {
         "message": "QR code envoyé par email"
     }
+
