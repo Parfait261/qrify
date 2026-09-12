@@ -8,3 +8,8 @@ class qr_code_request(BaseModel):
 class qr_code_response(BaseModel):
     name : str
     image : str
+    
+class qr_code_email_request(BaseModel):
+    email : EmailStr
+    nom : str
+    image : str
